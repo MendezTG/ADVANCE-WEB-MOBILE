@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Picture Browser</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        img { width: 100%; max-width: 500px; }
+        button { padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+<h1>Picture Browser</h1>
+    
+<img id="pic" src="" alt="Picture">
+<p id="desc"></p>
+    
+<button id="back">← Back</button>
+<button id="forward">Next →</button>
+<p id="info"></p>
+
+<script>
+$(function() {
+    const pics = [
+        {url:"https://www.google.com/imgres?q=pictures&imgurl=https%3A%2F%2Ftheportablewife.com%2Fwp-content%2Fuploads%2Fbest-places-to-take-pictures-in-paris-newfeatured.jpg&imgrefurl=https%3A%2F%2Ftheportablewife.com%2Ftravel%2Fdestinations%2Fbest-places-to-take-pictures-in-paris%2F&docid=nc5WZZ28Q2EUdM&tbnid=B8pKyzn7vMvJMM&vet=12ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECBgQAA..i&w=720&h=540&hcb=2&ved=2ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECBgQAA", text:"Tower"},
+        {url:"https://www.google.com/imgres?q=pictures&imgurl=https%3A%2F%2Fmedia.istockphoto.com%2Fid%2F825383494%2Fphoto%2Fbusiness-man-pushing-large-stone-up-to-hill-business-heavy-tasks-and-problems-concept.jpg%3Fs%3D612x612%26w%3D0%26k%3D20%26c%3DwtqvbQ6OIHitRVDPTtoT_1HKUAOgyqa7YzzTMXqGRaQ%3D&imgrefurl=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fstruggle&docid=Pz5uFs24yRRUhM&tbnid=c_k0XZB-zd8bBM&vet=12ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCAQAA..i&w=612&h=348&hcb=2&ved=2ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCAQAA", text:"Grit"},
+        {url:"https://www.google.com/imgres?q=pictures&imgurl=https%3A%2F%2Fstatic.vecteezy.com%2Fvite%2Fassets%2Fphoto-masthead-375-BoK_p8LG.webp&imgrefurl=https%3A%2F%2Fwww.vecteezy.com%2Ffree-photos&docid=ibTdn4unYxO9nM&tbnid=7F8_kUgVrrg0YM&vet=12ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECBoQAA..i&w=750&h=864&hcb=2&ved=2ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECBoQAA", text:"Moutians"},
+        {url:"https://www.google.com/imgres?q=pictures&imgurl=https%3A%2F%2Fmedia.istockphoto.com%2Fid%2F1317323736%2Fphoto%2Fa-view-up-into-the-trees-direction-sky.jpg%3Fs%3D612x612%26w%3D0%26k%3D20%26c%3Di4HYO7xhao7CkGy7Zc_8XSNX_iqG0vAwNsrH1ERmw2Q%3D&imgrefurl=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fnature&docid=tnVTsEa64LdCyM&tbnid=EE4aovnciYd7tM&vet=12ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCIQAA..i&w=612&h=408&hcb=2&ved=2ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCIQAA", text:"Trees"},
+        {url:"https://www.google.com/imgres?q=pictures&imgurl=https%3A%2F%2Fwww.thoughtco.com%2Fthmb%2Frip9NU8E4ERKbO7hBjwPc98UtfM%3D%2F1500x0%2Ffilters%3Ano_upscale()%3Amax_bytes(150000)%3Astrip_icc()%2Flion-805084_1920-c62a5582169c4bae82553d9a21c1a0bb.jpg&imgrefurl=https%3A%2F%2Fwww.thoughtco.com%2Fgallery-of-animal-pictures-4122659&docid=HXx_qCLSi_3K-M&tbnid=aGFGfU4gmSH4HM&vet=12ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCoQAA..i&w=1500&h=1004&hcb=2&ved=2ahUKEwjkpt_l38-SAxX15ckDHQg9KJ4QM3oECCoQAA", text:"King"}
+    ];
+        
+    let i = 0;
+        
+    function show() {
+        $('#pic').attr('src', pics[i].url).attr('alt', pics[i].text);
+        $('#desc').text(pics[i].text);
+        $('#info').text((i+1) + "/" + pics.length);
+    }
+        
+        $('#back').click(() => { i = (i-1+pics.length)%pics.length; show(); });
+        $('#forward').click(() => { i = (i+1)%pics.length; show(); });
+        
+        $(document).keydown(e => {
+            if(e.key === 'ArrowLeft') $('#back').click();
+            if(e.key === 'ArrowRight') $('#forward').click();
+        });
+        
+        show();
+    });
+    </script> 
+</body>
+</html>
