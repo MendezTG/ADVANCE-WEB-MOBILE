@@ -4,85 +4,22 @@
 <head>
 	<title>JavaScript calculation</title>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
-
-	<style>
-		body {
-			background-color: #000000;
-			font-family: 'Courier New';
-            padding: 20px;
-            text-align: center;
-        }
-        
-        h1 {
-            color: #31da31;
-        }
-        
-        .input-box {
-            margin: 10px;
-        }
-        
-        input {
-            padding: 8px;
-            margin: 5px;
-            width: 100px;
-			background-color: #000;
-			border: 2px solid #31da31;
-			color: white
-        }
-        
-        button {
-            padding: 10px 15px;
-            margin: 5px;
-            background-color: #31da31;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        #result {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 20px;
-            padding: 10px;
-            border: 2px solid #31da31;
-            min-height: 40px;
-        }
-		.right a{
-			margin-left: auto;
-    		color: #31da31;
-    		display: inline-block;
-    		border: 2px solid #31da31;
-    		padding: 5px;
-    		text-align: right;
-    		text-decoration: none;
-		}
-		.right:hover {
-			display: inline-block;
-    		background-color: #c2c1c4;
-    		color: #000000;
-    		transform: translate(-2px, -2px);
-		}
-	</style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-<div class="right">
+<div class="return">
 	<a href="project.html">
     RETURN TO LAB WORK & PROJECTS
 	</a>
-</div>
-<h1>Calculator</h1>
+</div> 
+<h1 class="h1C">Calculator</h1>
 <div class="input-box">
         <input type="number" id="num1" placeholder="Enter Number"> 
         <input type="number" id="num2" placeholder="Enter Number">
     </div>
     
-    <div>
+    <div class="btn">
         <button onclick="calculate('add')">+ Add</button>
         <button onclick="calculate('subtract')">- Subtract</button>
         <button onclick="calculate('multiply')">× Multiply</button>
