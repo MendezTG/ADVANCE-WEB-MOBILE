@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON WEATHER</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="return">
+	<a href="project.html">
+    RETURN TO LAB WORK & PROJECTS
+	</a>
+    </div>
+    <h1>WEATHER DATA</h1>
+    <h2>I WILL BE USING JSON TO PULL WEATHER INFO AND DISPLAY IT ON THIS WEBPAGE</h2>
+    <div>
+        <h3>COORDINATES</h3>
+        <p>Longitude: <span id="lon"></span></p>
+        <p>Latitude: <span id="lat"></span></p>
+    </div>
+    <div>
+        <h3>WEATHER</h3>
+        <p>MAIN: <span id="main"></span></p>
+        <p>Description: <span id="desc"></span></p>
+    </div>
+    <div>
+        <h3>BASE</h3>
+        <p><span id="base"></span></p>
+    </div>
+    <div>
+        <h3>WIND</h3>
+        <p>SPEED: <span id="speed"></span></p>
+        <p>DEGREE: <span id="deg"></span></p>
+    </div>
+    <div>
+        <h3>CLOUDS</h3>
+        <p>ALL: <span id="all"></span></p>
+    </div>
+    <div>
+        <h3>SYSTEM</h3>
+        <p>ID: <span id="id"></span></p>
+        <p>Country: <span id="country"></span></p>
+        <p>Sunrise: <span id="rise"></span></p>
+        <p>Sunset: <span id="set"></span></p>
+    </div>
+    <div>
+        <h3>ID</h3>
+        <p><span id="id2"></span></p>
+    </div>
+    <div>
+        <h3>NAME</h3>
+        <p><span id="name"></span></p>
+    </div>   
+<script>
+    $(document).ready(function () {
+        console.log("JSON WEATHER PAGE");
+        const weather = {
+            "coord": {
+                "lon": -0.13,
+                "lat": 51.51
+            },
+            "weather": [
+                {
+                "id": 500,
+                "main": "Rain",
+                "description": "light rain",
+                "icon": "10d"
+                }
+            ],
+            "base": "cmc stations",
+            "main": {
+                "temp": 288.26,
+                "pressure": 1026,
+                "humidity": 59,
+                "temp_min": 286.95,
+                "temp_max": 289.26
+            },
+            "wind": {
+                "speed": 3.6,
+                "deg": 90
+            },
+            "clouds": {
+                "all": 75
+            },
+            "dt": 1441734773,
+            "sys": {
+                "type": 1,
+                "id": 5091,
+                "message": 0.0165,
+                "country": "GB",
+                "sunrise": 1441689887,
+                "sunset": 1441737016
+            },
+            "id": 2643743,
+            "name": "London",
+            "cod": 200
+        }
+        $('#lon').text(weather.coord.lon);
+        $('#lat').text(weather.coord.lat);
+        $('#main').text(weather.weather[0].main);
+        $('#desc').text(weather.weather[0].description);
+        $('#base').text(weather.base);
+        $('#speed').text(weather.wind.speed);
+        $('#deg').text(weather.wind.deg);
+        $('#all').text(weather.clouds.all);
+        $('#id').text(weather.sys.id);
+        $('#country').text(weather.sys.country);
+        $('#rise').text(weather.sys.sunrise);
+        $('#set').text(weather.sys.sunset);
+        $('#id2').text(weather.id);
+        $('#name').text(weather.name);
+    
+    });
+</script>
+</body>
+</html>
