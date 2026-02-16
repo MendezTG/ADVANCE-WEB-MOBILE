@@ -285,3 +285,9 @@ button:hover {
     padding-top: 20px;
     border-top: 2px solid #31da31;
 }
+ul {
+    margin: 10px;
+}
+li {
+    margin: 5px;
+}
