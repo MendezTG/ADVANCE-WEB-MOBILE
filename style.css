@@ -114,18 +114,18 @@ header {
     text-decoration: underline;
     background-color: #004400;
 }
-.right a{
-    color: inherit;
+.right {
+    text-align: right;
     display: inline-block;
     border: 2px solid #31da31;
-    padding: 5px;
-    text-align: right;
+    padding: 8px 15px;
     text-decoration: none;
+    color: #31da31;
+    transition: 0.2s ease;
 }
 .right:hover {
-    background-color: #c2c1c4;
-    color: #000000;
-    transform: translate(-2px, -2px);
+    background-color: #31da31;
+    color: black;
 }
 .project {
     text-align: center;
@@ -290,4 +290,28 @@ ul {
 }
 li {
     margin: 5px;
+}
+#albums {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10x;
+    padding: 0;
+}
+.album-item {
+    list-style: none;
+    margin: 8px 0;
+}
+
+.album-link {
+    display: inline-block;
+    border: 2px solid #31da31;
+    padding: 8px 15px;
+    text-decoration: none; 
+    color: #31da31;
+    transition: 0.2s ease;
+}
+
+.album-link:hover {
+    background-color: #31da31;
+    color: black;
 }
