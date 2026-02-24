@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Album Information</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+<a class="right" href="userAlbum.html">RETURN TO USER AND ALBUMS</a>
+<h1>Album Photos</h1>
+<div id="photos"></div>
+
+<div class="btm">
+    <h4>Note from Tony Mendez:</h4>
+    <p>The JSONPlaceHolder image URLs seem not to work, and therefore no images can be displayed at this time. So, please take a look at new images I have imported.</p>
+</div>
+
+<script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const albumId = urlParams.get('id');
+        console.log("Album ID:", albumId);
+
+        if (albumId) {
+            $.get(`https://jsonplaceholder.typicode.com/photos/${albumId}`, function(photo) {
+            $("#photos").append(`
+                <div>
+                    <img src="album${albumId}.png" alt="${albumId}" width="150">
+                    <p>${photo.title}</p>
+                </div>
+            `);
+
+        });
+    } 
+});
+</script>
+</body>
+</html>

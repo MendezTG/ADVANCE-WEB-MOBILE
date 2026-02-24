@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User and Albums</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+	<a class="right" href="labs.html">RETURN TO LAB WORK</a>
+    <div> 
+        <h1> JSONPLACEHOLDER DEMO </h1>
+        <p> Page 1: User and Albums
+    </div>
+    <div> 
+        <h2>USER PROFILE</h2>
+        <div id="user_info"> 
+            <p>Name: <span id="name"></span></p>
+            <p>Username: <span id="user"></span></p>
+            <p>Email: <span id="email"></span></p>
+            <p>Phone: <span id="phone"></span></p>
+            <p>Address: <span id="address"></span></p>
+            <p>Company: <span id="company"></span></p>
+        </div>
+        <div>
+            <h2>Albums</h2>
+            <ul id="albums"></ul>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $.get('https://jsonplaceholder.typicode.com/users/1', function(user) {
+            $('#name').text(user.name);
+            $('#user').text(user.username);
+            $('#email').text(user.email);
+            $('#phone').text(user.phone);
+            $('#address').text(user.address.street + ', ' + user.address.city);
+            $('#company').text(user.company.name);
+        });
+        $.get("https://jsonplaceholder.typicode.com/albums?userId=1", function(album){
+            $.each(album, function(index, albums) {
+                $("#albums").append(`
+                    <li class="album-item">
+                        <a href="albumphotot.html?id=${albums.id}" class="album-link">
+                            ${albums.title}
+                        </a>
+                    </li>
+                `);
+            });
+        });
+    });
+    </script>
+
+</body>
+</html>
