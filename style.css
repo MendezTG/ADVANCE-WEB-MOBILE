@@ -315,3 +315,50 @@ li {
     background-color: #31da31;
     color: black;
 }
+
+.p-h1 {
+    display: inline-block;
+    border-bottom: 5px solid #31da31;
+    margin-block: 20px;
+}
+
+.project-box {
+    padding: 20px 0;
+    display: flex;
+    gap: 30px;
+}
+
+.projects {
+    width: 40%;
+}
+
+.p-desc {
+    width: 60%;
+}
+
+.p-b {
+    margin: 20px;
+}
+
+.p-b a{
+    text-align: center;
+    display: inline-block;
+    border: 2px solid #31da31;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #31da31;
+    transition: 0.2s ease;
+    width: 80%;
+}
+.p-b:hover a{
+    background-color: #31da31;
+    color: black;
+    width: 80%;
+}
+
+#image {
+    display: block;
+    margin: 15px auto;
+    max-width: 250px;
+    height: auto;
+}
