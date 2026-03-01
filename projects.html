@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT PAGE</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div>
+        <div class="status">
+            <div  class="left">
+                <span>USER: Tony Mendez |</span>
+                <span>Class: IT4403 |</span>
+                <span>STATUS: ONLINE</span>
+            </div>
+            <div>
+                <a class="right" href="index.html">RETURN HOME</a>
+                <a class="right" href="labs.html">LAB WORK</a>
+            </div>
+        </div>
+        <h1 class="p-h1">PROJECT PAGE</h1>
+        <div class="project-box">
+            <div class="projects">
+                <div class="p-b">
+                    <a href="google-book.html"
+                        data-image="book.png"
+                        data-description="A webpage contaning JSON data for one single book, including details such as title, authors, description, and other metadata.">
+                        SINGLE BOOK DATA
+                    </a>
+                </div>
+                <div class="p-b">
+                    <a href="google-books-search.html"
+                        data-image="books.png"
+                        data-description="A webpage contaning JSON data for multiple books returned from a search query.">
+                        BOOK LIST DATA
+                    </a>
+                </div>
+            </div>
+                <div class="p-desc">
+                    <img id="image" src="">
+                    <p id="description"></p>
+                </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () { 
+            $(".p-b a").hover(
+                function () {
+                    let image = $(this).data("image");
+                    let description = $(this).data("description");
+
+                    $("#description").text(description);
+                    $("#image").attr("src", image).fadeIn(400);
+                
+                },
+                function () {
+                    $("#description").text("");
+                    $("#image").fadeOut(300);
+                }
+            );
+        });
+    </script>
+</body>
+</html>
