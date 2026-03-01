@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GOOGLE BOOK</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New';
+        }
+        body {
+            background-color: #000000;
+            color: #31da31;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 3px solid #31da31;
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-left: 5px solid ;
+            padding-left: 10px;
+            margin: 25px 0 15px;
+        }
+        .status {
+            display: flex;
+            justify-content: space-between;  
+            align-items: flex-start;                            
+            padding: 5px
+        }
+        .right {
+            text-align: right;
+            display: inline-block;
+            border: 2px solid #31da31;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: #31da31;
+            transition: 0.2s ease;
+        }
+        .right:hover {
+            background-color: #31da31;
+            color: black;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .book {
+            display: flex;
+            flex-wrap: wrap; 
+            gap: 30px;
+        }
+        .book-data, .image-data {
+            flex: 1 1 300px; 
+        }
+        #book-image {
+            max-width: 250px; 
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 15px auto;
+            border: 2px solid #31da31;
+            border-radius: 8px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div>
+        <div class="status">
+            <div  class="left">
+                <span>USER: Tony Mendez |</span>
+                <span>Class: IT4403 |</span>
+                <span>STATUS: ONLINE</span>
+            </div>
+            <div>
+                <a class="right" href="index.html">RETURN HOME</a>
+                <a class="right" href="projects.html">PROJECTS</a>
+                <a class="right" href="labs.html">LAB WORK</a>
+            </div>
+        </div>
+        <h1>BOOK DATA</h1>
+        <div class="book">
+            <div class="book-data">
+                <h2><span id="book-title"></span></h2>
+                <p><span id="sub-title"></span></p>
+                <p>Authors: <span id="author"></span></p>
+                <p>Publisher: <span id="publisher"></span></p>
+                <p>Publish Date: <span id="publish-date"></span></p>
+                <p><span id="description"></span></p>
+            </div>
+            <div class="image-data">
+                <img id="book-image" src=""> 
+            </div>
+        </div>
+        <p><a class="right" id="link" href="" target="_blank">More info here!!!</a></p>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $.getJSON("https://www.googleapis.com/books/v1/volumes/Wfan6L9RGgYC", function(data){
+                $("#book-title").text(data.volumeInfo.title);
+                $("#sub-title").text(data.volumeInfo.subtitle);
+                $("#author").text(data.volumeInfo.authors);
+                $("#publisher").text(data.volumeInfo.publisher);
+                $("#publish-date").text(data.volumeInfo.publishedDate);
+                $("#description").html(data.volumeInfo.description);
+                $("#book-image").attr("src", data.volumeInfo.imageLinks.thumbnail);
+                $("#link").attr("href", data.volumeInfo.infoLink);
+            });
+        });
+    </script>
+</body>
+</html>
