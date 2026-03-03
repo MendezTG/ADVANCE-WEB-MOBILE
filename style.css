@@ -72,17 +72,18 @@ header {
 }
 
 .link-box {
-    background-color: #111111;
     border: 2px solid #31da31;
-    padding: 20px;
-    transition: 0.3s;
+    padding: 8px 15px;
+    text-decoration: none;
+    color: #31da31;
+    background-color: #111111;
+    transition: 0.2s ease;
     height: 100%;
 }
 
 .link-box:hover {
-    background-color: #c2c1c4;
-    color: #000000;
-    transform: translate(-5px, -5px);
+    background-color: #31da31;
+    color: black;
 }
 
 .link-box a {
@@ -120,6 +121,7 @@ header {
     border: 2px solid #31da31;
     padding: 8px 15px;
     text-decoration: none;
+    background-color: #111111;
     color: #31da31;
     transition: 0.2s ease;
 }
@@ -143,17 +145,18 @@ header {
     text-decoration: none;
 }
 .border {
-    color: inherit;
+    background-color: #111111;
+    color: #31da31;
     border: 3px solid #31da31;
     padding: 15px;
     margin: 20px;
     text-decoration: none;
     text-align: center;
+    transition: 0.2s ease;
 }
 .border:hover {
-    background-color: #c2c1c4;
-    color: #000000;
-    transform: translate(-2px, -2px);
+    background-color: #31da31;
+    color: black;
 }
 .border a {
     color: inherit;
