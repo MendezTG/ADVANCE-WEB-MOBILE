@@ -39,41 +39,57 @@
     
     <div id="result">Result will appear here</div>
 
-<script type="text/javascript">
-    function calculate(operation) {
-        var num1 = parseFloat($("#num1").val());
-        var num2 = parseFloat($("#num2").val());
-        var color = $("#color").val() ;
-        var result;
-        var symbol;
-        
-        if (operation === 'add') {
-            result = num1 + num2;
-            symbol = '+';
-        } else if (operation === 'subtract') {
-            result = num1 - num2;
-            symbol = '-';
-        } else if (operation === 'multiply') {
-            result = num1 * num2;
-            symbol = '×';
-        } else if (operation === 'divide') {
-            if (num2 === 0) {
-                result = "Cannot divide by zero";
-            } else {
-                result = num1 / num2;
-            }
-            symbol = '÷';
-        }
-        
-        $("#result").html(num1 + " " + symbol + " " + num2 + " = " + result);
-        $("#result").css("color", color);
-    }
+<script>
     $(document).ready(function() {
-        calculate('add');
+        function calculate(operation) {
+            var num1 = parseFloat($("#num1").val());
+            var num2 = parseFloat($("#num2").val());
+            var color = $("#color").val() ;
+            var result; 
+            var symbol;
+
+            if(isNaN(num1) || isNaN(num2)){
+                $("#result").html("Please Enter a Valid Number")
+                return;
+            };
+
+            switch(operation) {
+                case "add":
+                    result = num1 + num2;
+                    symbol = "+";
+                    break;
+                case "subtract":
+                    result = num1 - num2;
+                    symbol = "-";
+                    break;
+                case "multiply":
+                    result = num1 * num2;
+                    symbol = "x";
+                    break;
+                case "division":
+                    if(num1 === 0){
+                        $("#result").html("Cannot Divide by Zero");
+                        return;
+                    }
+                    result = num1 / num2;
+                    symbol = "÷";
+                    break;
+            }
+            $("#result")
+                .html(`${num1} ${symbol} ${num2} = ${result}`)
+                .css("color", color);
+
+        };
+        $(".btn button").click(function () {
+            const operation = $(this).text().toLowerCase();
+
+            if (operation.includes("add")) calculate("add");
+            if (operation.includes("subtract")) calculate("subtract");
+            if (operation.includes("multiply")) calculate("multiply");
+            if (operation.includes("divide")) calculate("divide");
+        });
     });
 </script>
 </body>
 
 </html>
-
-
