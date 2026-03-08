@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call the Google Books API Using JavaScript</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New';
+        }
+        body {
+            background-color: #000000;
+            color: #31da31;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 3px solid #31da31;
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-left: 5px solid ;
+            padding-left: 10px;
+            margin: 25px 0 15px;
+        }
+        .status {
+            display: flex;
+            justify-content: space-between;  
+            align-items: flex-start;                            
+            padding: 5px
+        }
+        .right {
+            text-align: right;
+            display: inline-block;
+            border: 2px solid #31da31;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: #31da31;
+            transition: 0.2s ease;
+        }
+        .right:hover {
+            background-color: #31da31;
+            color: black;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .book-btn {
+            background-color: #31da31;
+            color: #000000;
+            cursor: pointer;
+            padding: 8px 15px;
+            margin: 5px;
+            transition: 0.2s ease;
+        }
+        .book-btn:hover {
+            background-color: #111111;
+            color: #31da31;
+        }
+        #container {
+            display: flex;
+            gap: 30px;
+        }
+        .btn {
+            width: 30%;
+        } 
+        .books {
+            width: 70%;
+        }
+        #thumbnail {
+            display: block;
+            margin: 15px auto;
+            max-width: 250px;
+            height: auto;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="status">
+        <div class="left">
+            <span>USER: Tony Mendez |</span>
+            <span>Class: IT4403 |</span>
+            <span>STATUS: ONLINE</span>
+        </div>
+        <div>
+            <a class="right" href="index.html">RETURN HOME</a>
+            <a class="right" href="projects.html">PROJECTS</a>
+            <a class="right" href="labs.html">LAB WORK</a>
+        </div>
+    </div>
+    <div>
+        <h2>Call the Google Books API Using JavaScript</h1>
+        <h2>Top 10 search results for Data Analysis Books</h2>
+        <div id="container">
+            <div class="btn" id="books-button"></div>
+            <div class="books">
+                <h3 id="title">Select A BOOK</h3>
+                <img id="thumbnail">
+                <p id="author"></p>
+                <p id="date"></p>
+                <p id="desc"></p>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            let url = "https://www.googleapis.com/books/v1/volumes?q=data+analysis&maxResults=10";
+            let books = []
+
+            $.getJSON(url, function(data) {
+                books = data.items;
+
+                for(let i=0;i<books.length;i++){
+                    let title = books[i].volumeInfo.title;
+                    let button = `
+                        <button class="book-btn" data-index="${i}">
+                                ${title}
+                        </button>
+                    `;
+                    $("#books-button").append(button);
+                }
+            });
+            $("#books-button").on("click",".book-btn", function() {
+                let i = $(this).data("index");
+
+                let book = books[i].volumeInfo
+                let title = book.title;
+                let authors = book.authors ? book.authors.join(", ") : "Unknown";
+                let date = book.publishedDate;
+                let description = book.description;
+                let thumbnail = ""
+                if(book.imageLinks){
+                    thumbnail = book.imageLinks.thumbnail
+                }
+
+                $("#title").text(title);
+                $("#thumbnail").attr("src", thumbnail);
+                $("#author").text("AUTHOR(S): " + authors);
+                $("#date").text("PUBLISHED: " + date);
+                $("#desc").html(description);
+            }); 
+        });
+    </script>
+</body>
+</html>

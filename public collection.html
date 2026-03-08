@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work with a Public Collection (Google Books Library)</title>
+    <style>        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New';
+        }
+        body {
+            background-color: #000000;
+            color: #31da31;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 3px solid #31da31;
+            min-height: 100vh;
+            transition: 0.3s;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            border-left: 5px solid ;
+            padding-left: 10px;
+            margin: 25px 0 15px;
+        }
+        .status {
+            display: flex;
+            justify-content: space-between;  
+            align-items: flex-start;                            
+            padding: 5px
+        }
+        .right {
+            text-align: right;
+            display: inline-block;
+            border: 2px solid #31da31;
+            padding: 8px 15px;
+            text-decoration: none;
+            color: #31da31;
+            transition: 0.2s ease;
+        }
+        .right:hover {
+            background-color: #31da31;
+            color: black;
+        }
+        p {
+            margin-bottom: 10px;
+        }
+        .library {
+            text-align: center;
+            margin: 30px;
+        }
+        .bar {
+            border: 3px solid #31da31;
+            padding: 10px;
+            margin: 20px;
+            transition: 0.2s ease;
+        }
+        .bar:hover {
+            background-color: #31da31;
+            color: #000000;
+            cursor: pointer;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="status">
+        <div class="left">
+            <span>USER: Tony Mendez |</span>
+            <span>Class: IT4403 |</span>
+            <span>STATUS: ONLINE</span>
+        </div>
+        <div>
+            <a class="right" href="index.html">RETURN HOME</a>
+            <a class="right" href="projects.html">PROJECTS</a>
+            <a class="right" href="labs.html">LAB WORK</a>
+        </div>
+    </div>
+    <div>
+        <h2>Work with a Public Collection (Google Books Library)</h2>
+        <div class="library"></div>
+        <div class="books" id="library-books"></div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+
+           let volumeID = [
+            "OQQtDwAAQBAJ",
+            "ykiHygEACAAJ",
+            "n-lPcJypkjcC"
+           ];
+
+            for(let i=0; i<volumeID.length; i++){
+                
+                let bar = `
+                    <span class="bar" data-index="${i}">
+                        BOOK ${i + 1}
+                    </span>
+                `;
+                $(".library").append(bar)
+            }
+
+            $(".library").on("click", ".bar", function() {
+                let i = $(this).data("index");
+                let id = volumeID[i]
+                let url = "https://www.googleapis.com/books/v1/volumes/" + id;
+
+                $.getJSON(url, function(book) {
+
+                    let title = book.volumeInfo.title;
+                    let authors = "Unkown";
+                    if(book.volumeInfo.authors) {
+                        authors = book.volumeInfo.authors.join(", ");
+                    }
+                    let thumbnail = book.volumeInfo.imageLinks.thumbnail;
+                    let date = book.volumeInfo.publishedDate;
+                    let description = book.volumeInfo.description;
+                    let pageCount = book.volumeInfo.pageCount;
+                    let categories = book.volumeInfo.categories[0];
+
+                    let html = `
+                        <div class="book">
+                            <h3>${title}</h3>
+                            <p>Author: ${authors}</p>
+                            <img src="${thumbnail}">
+                            <p>Published: ${date}</p>
+                            <p>${description}</p>
+                            <p>Page Count: ${pageCount}</p>
+                            <p>${categories}</p>
+                        </div>
+                    `;
+                    $("#library-books").html(html);
+            });
+        });
+    });        
+    </script>
+</body>
+</html>
