@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milestone 2 Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Courier New';
+            box-sizing: border-box;
+        }
+        body {
+            background-color: hsl(15, 73%, 86%);
+            color: hsl(235, 27%, 28%);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+        }
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        nav a {
+            text-decoration:none;
+            color:hsl(235,27%,28%);
+            padding:8px 15px;
+            border-radius:6px;
+            transition:0.2s;
+        }
+        nav a:hover {
+            background:hsl(14,55%,90%);
+            
+        }
+        .controls{
+            display:flex;
+            flex-wrap:wrap;
+            gap:10px;
+            margin-bottom:20px;
+        }
+        input, button, select{
+            padding:10px 15px;
+            font-size:1rem;
+            border-radius:8px;
+            border:2px solid hsl(235, 27%, 28%);
+            background:hsl(15, 73%, 86%);
+            color:hsl(235, 27%, 28%);
+        }
+        input{
+            flex:1;
+            min-width:200px;
+        }
+        button{
+            cursor:pointer;
+            transition: 0.2s;
+        }
+
+        button:hover{
+            background:hsl(14, 55%, 90%);
+        }
+
+
+        #results{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+            gap:20px;
+        }
+
+
+        .book{
+            background:hsl(0, 7%, 94%);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            padding:15px;
+            border-radius:8px;
+            text-align:center;
+            transition:0.2s;
+        }
+
+        .book:hover{
+            transform:translateY(-5px);
+        }
+
+        .book img{
+            width:120px;
+            height:180px;
+            object-fit: cover;
+            margin-top:10px;
+        }
+
+        .book a{
+            text-decoration:none;
+            color:hsl(235, 27%, 28%);
+            font-weight: bold;
+        }
+        
+        #projects {
+            display: inline-block;
+            margin-top: 40px;
+            text-decoration:none;
+            background: hsl(235,27%,28%);
+            color: hsl(14,55%,90%);;
+            padding:10px 20px;
+            text-decoration: none;
+            text-align: center;
+            border-radius:6px;
+            transition:0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08)
+        }
+
+        #projects:hover {
+            transform:translateY(-5px);
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Book Search</h1>
+    
+    <nav>
+        <a href="book-search.html">Home - Book Search</a>
+        <a href="bookshelf.html">My Bookshelf</a>
+    </nav>
+
+    <div class="controls">
+        <input type="text" id="search" placeholder="Search Books...">
+        <button id="btn">Search</button>
+
+        <select id="select">
+            <option value="0">Page 1</option>
+            <option value="20">Page 2</option>
+            <option value="40">Page 3</option>
+        </select>
+    </div>
+
+    <div id="results"></div>
+    <div style="text-align: center;">
+        <a id="projects" href="projects.html">Back to Projects</a>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            
+            let newSearch = "";
+            $("#btn").click(function() {
+
+                newSearch = $("#search").val();
+                books(0);
+            });
+            
+            $("#select").change(function() {
+                let first = $(this).val();
+                books(first);
+            });
+            
+            function books(start){
+                let url = "https://www.googleapis.com/books/v1/volumes?q=" + newSearch + "&startIndex=" + start +"&maxResults=20";
+
+                $.getJSON(url,function(data){
+                    $("#results").empty();
+                    data.items.forEach(function(book){
+                        let title = book.volumeInfo.title;
+                        let id = book.id;
+                        let thumbnail = "";
+
+                        if(book.volumeInfo.imageLinks){
+                            thumbnail = book.volumeInfo.imageLinks.thumbnail;
+                        }
+
+                        $("#results").append(`
+                        <div class="book">
+                            <h2>
+                                <a href="details.html?id=${id}">
+                                    ${title}
+                                </a>
+                            </h2>
+                            <img src="${thumbnail}">
+                        </div>
+                        `);
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
