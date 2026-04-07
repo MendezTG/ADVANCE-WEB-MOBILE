@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Search SPA</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: hsl(223, 82%, 89%);
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 14000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            color: hsl(215, 41%, 20%);
+            margin-top: 0;          
+        }
+
+        #searchBox {
+            padding: 10px 15px;
+            border: none;
+            background-color: hsl(212, 72%, 59%);
+            color: hsl(0, 0%, 100%);
+            border-radius: 6px;
+            cursor: pointer;
+            width: 400px;
+            height: 15px;
+            font-size: 16px;
+        }
+
+        #searchBtn {
+            padding: 10px 15px;
+            border: none;
+            background-color: hsl(212, 72%, 59%);
+            color: hsl(0, 0%, 100%);
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        #searchBtn:hover {
+            background-color: hsl(210, 56%, 47%);
+        }
+
+        #results, #collection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .book {
+            background: hsl(0, 0%, 100%);
+            border-radius: 10px;
+            width: 140px;
+            margin: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .book:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 12px rgba(0,0,0,0.2);
+        }
+
+        .book img {
+            width: 100px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .book p {
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        #page {
+            margin-top: 20px;
+        }
+
+        .pageBtn {
+            margin: 5px;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            background-color: hsl(0, 0%, 87%);
+            cursor: pointer;
+        }
+
+        .pageBtn:hover {
+            background-color: hsl(0, 0%, 73%);
+        }
+
+        .pageBtn.active {
+            background-color: hsl(212, 72%, 59%);
+            color: hsl(0, 0%, 100%);
+        }
+
+        #details {
+            margin: 30px auto;
+            padding: 20px;
+            max-width: 600px;
+            background: hsl(0, 0%, 100%);
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Book Search</h1>
+
+    <!-- Search box -->
+     <form id="searchForm">
+        <input type="text" id="searchBox" placeholder="Search books">
+        <button id="searchBtn">Search</button> 
+     </form>
+
+    <!-- Results -->
+    <div id="results"></div>
+
+    <!-- Pagination -->
+    <div id="page"></div>
+    
+    <!-- Details -->
+    <div id="details"></div>
+
+    <!-- Book Collection -->
+    <h2>Featured Books</h2>
+    <div id="collection"></div>
+    <footer>Click any book to see details • Powered by Google Books API</footer>
+</div>
+    
+    <!-- JS -->
+    <script>
+    $(document).ready(function () {
+        let page = 0;
+        let query ="";
+    
+       $("#searchBtn").click(function (){
+            query = $("#searchBox").val();
+            page = 0;
+            searchBooks();
+       });
+       
+       function searchBooks() {
+            let index = page * 10;
+            $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${query}&startIndex=${index}&maxResults=10&key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, 
+                function (data) {
+                    $("#results").empty();
+                    if (!data.items) {
+                        $("#results").html("<p>No results found</p>");
+                        return;
+                    }
+                    data.items.forEach(book => {
+                        let title = book.volumeInfo.title;
+                        let image = book.volumeInfo.imageLinks?.thumbnail || "";
+
+                        $("#results").append(` 
+                            <div class="book" data-id="${book.id}">
+                                <p>${title}</p>
+                                <img src="${image}">
+                            </div>
+                        `);
+                    });
+                    pagination()
+                }
+            );
+       }
+       $("#searchForm").submit(function (e) {
+            e.preventDefault(); // stops page reload
+            searchBooks();
+        });
+
+       function pagination() {
+            $("#page").empty()
+            
+            for (let i = 0; i < 5; i++) {
+                let active = (i === page) ? "active" : "";
+                $("#page").append(`
+                    <button class="pageBtn ${active}" data-page="${i}">
+                        ${i + 1}
+                    </button>
+                `);
+            }
+       }
+       
+       $(document).on("click", ".pageBtn", function () {
+            page = $(this).data("page");
+            searchBooks();
+       });
+
+       $(document).on("click", ".book", function() {
+            let bookId = $(this).data("id");
+            $.getJSON(`https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, function (data) {
+                let info = data.volumeInfo;
+
+                $("#details").html(`
+                    <h2>${info.title}</h2>
+                    <p>Author: ${info.authors?.join(", ") || "N/A"}</p>
+                    <p>${info.description || "No description available"}</p>
+                `);
+            });
+       });
+
+       function loadCollections () {
+            let myCollection = [
+                "OQQtDwAAQBAJ",
+                "ykiHygEACAAJ",
+                "n-lPcJypkjcC",
+                "zqw8AwAAQBAJ",
+                "BYzwAQAAQBAJ",
+                "dFHSswEACAAJ"
+            ];
+            myCollection.forEach(id => {
+                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, function (data) {
+                    let title = data.volumeInfo.title || "No Title";
+                    let image = data.volumeInfo.imageLinks?.thumbnail || "";
+
+                    $("#collection").append(`
+                        <div class="book" data-id="${data.id}">
+                            <p>${title}</p>
+                            <img src="${image}" alt="Book Image">
+                        </div>
+                    `);
+                });
+            });
+       }
+        loadCollections();
+});
+    </script>
+</body>
+</html>
