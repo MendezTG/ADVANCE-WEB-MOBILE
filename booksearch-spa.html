@@ -5,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Search SPA</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://unpkg.com/mustache@latest"></script>
     <style>
+        * {
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: Gemneva, Arial, sans-serif;
             background-color: hsl(223, 82%, 89%);
             margin: 0;
             padding: 20px;
@@ -15,41 +19,50 @@
         }
 
         .container {
-            max-width: 14000px;
+            max-width: 1400px;
             margin: 0 auto;
         }
 
         h1 {
+            color: hsl(219, 58%, 28%);
             margin-bottom: 20px;
         }
 
         h2 {
-            color: hsl(215, 41%, 20%);
-            margin-top: 0;          
+            color: hsl(214, 41%, 20%);
+            margin-top: 0;  
+            border-bottom: 2px solid hsl(216, 30%, 66%);
+            display: inline-block;
+            padding-bottom: 5px;        
+        }
+
+        #searchForm {
+            margin: 20px 0;
         }
 
         #searchBox {
             padding: 10px 15px;
-            border: none;
+            border: 1px solid black;
             background-color: hsl(212, 72%, 59%);
             color: hsl(0, 0%, 100%);
             border-radius: 6px;
             cursor: pointer;
             width: 400px;
-            height: 15px;
+            height: 30px;
             font-size: 16px;
         }
 
-        #searchBtn {
+        #searchBtn, .ctrl {
             padding: 10px 15px;
             border: none;
             background-color: hsl(212, 72%, 59%);
             color: hsl(0, 0%, 100%);
             border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
         }
 
-        #searchBtn:hover {
+        #searchBtn:hover, .ctrl:hover {
             background-color: hsl(210, 56%, 47%);
         }
 
@@ -60,7 +73,7 @@
             margin-top: 20px;
         }
 
-        .book {
+        .book.grid {
             background: hsl(0, 0%, 100%);
             border-radius: 10px;
             width: 140px;
@@ -69,17 +82,53 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             cursor: pointer;
             transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
         }
 
-        .book:hover {
+        .book.grid:hover {
             transform: scale(1.05);
             box-shadow: 0 5px 12px rgba(0,0,0,0.2);
         }
 
-        .book img {
+        .book.grid img {
             width: 100px;
             height: 150px;
             object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .book.list {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            margin: 8px auto;
+            padding: 10px 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .book.list:hover {
+            background: hsl(223, 54%, 97%);
+            transform: scale(1.01);
+        }
+
+        .book.list img {
+            width: 60px;
+            height: 90px;
+            object-fit: cover;
+            margin-right: 25px;
+            border-radius: 6px;
+        }
+
+        .book.list h3 {
+            margin: 20px;
+            font-size: 1.1rem;
+            text-align: left;
+            line-height: 1.3;
         }
 
         .book p {
@@ -118,6 +167,11 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
             text-align: left;
         }
+        @media (max-width: 600px) {
+            .book.grid { width: 130px; }
+            .book.grid img { width: 100px; height: 150px; }
+            #searchBox { width: 70%; }
+        }
     </style>
 </head>
 <body>
@@ -130,33 +184,114 @@
         <button id="searchBtn">Search</button> 
      </form>
 
+    <br>
+
+    <!--View Controlls-->
+    <button id="grid" class="ctrl">Grid</button>
+    <button id="list" class="ctrl">List</button>
+
+    <!--Section Toggle-->
+    <button id="showSearch" class="ctrl">Search Results</button>
+    <button id="showCollection" class="ctrl">Collection</button>
+
     <!-- Results -->
     <div id="results"></div>
-
+        
     <!-- Pagination -->
     <div id="page"></div>
     
-    <!-- Details -->
-    <div id="details"></div>
+    <br><br> 
 
     <!-- Book Collection -->
     <h2>Featured Books</h2>
     <div id="collection"></div>
+
+    
+    <!-- Details -->
+    <div id="details"></div>
+
     <footer>Click any book to see details • Powered by Google Books API</footer>
 </div>
-    
+
+    <!--Search results template-->
+    <script id="book-template" type="x-tmpl-mustache">
+        {{#books}}
+        <div class="book {{view}}" data-id="{{id}}">
+            <h3>{{title}}</h3>
+            <img src="{{image}}" alt="Book">
+        </div>
+        {{/books}}
+    </script>
+
+    <!--details template-->
+    <script id="details-template" type="x-tmpl-mustache">
+        <h2>{{title}}</h2>
+        <p><strong>{{author}}</strong></p>
+        <p><strong>{{rating}} / 5 ({{ratingsCount}} votes)</strong></p>
+        <p><strong>{{language}}</strong></p>
+        <p><strong>Page Count: {{pageCount}}</strong></p>
+        <p>{{{description}}}</p>
+    </script>
+
+    <!--collection template-->
+    <script id="collection-template" type="x-tmpl-mustache">
+        {{#books}}
+        <div class="book {{view}}" data-id="{{id}}">
+            <h3>{{title}}</h3>
+            <img src="{{image}}" alt="Book">
+        </div>
+        {{/books}}
+    </script>
+
     <!-- JS -->
     <script>
     $(document).ready(function () {
         let page = 0;
         let query ="";
-    
-       $("#searchBtn").click(function (){
+        let currentView = "grid";
+
+       $("#searchForm").submit(function (e) {
+            e.preventDefault(); // stops page reload
             query = $("#searchBox").val();
+            if (!query.trim()) return;
             page = 0;
+            searchBooks()
+
+            $("#results, #page").show();
+            $("#collection").hide();
+            $("#showSearch").addClass("active");
+            $("#showCollection").removeClass("active");
+        });
+ 
+
+        $("#grid").click(function () {
+            currentView = "grid";
             searchBooks();
-       });
-       
+            loadCollections();
+        });
+
+        $("#list").click(function () {
+            currentView = "list";
+            searchBooks();
+            loadCollections();
+        });
+
+        $("#showSearch").click(function () {
+            $("#results, #page").show();
+            $("#collection").hide();
+            $("#details").empty();
+            $(this).addClass("active");
+            $("#showCollection").removeClass("active");
+        });
+
+        $("#showCollection").click(function () {
+            $("#results, #page").hide();
+            $("#collection").show();
+            $("#details").empty();
+            $(this).addClass("active");
+            $("#showSearch").removeClass("active");
+        });
+
        function searchBooks() {
             let index = page * 10;
             $.getJSON(`https://www.googleapis.com/books/v1/volumes?q=${query}&startIndex=${index}&maxResults=10&key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, 
@@ -166,26 +301,21 @@
                         $("#results").html("<p>No results found</p>");
                         return;
                     }
-                    data.items.forEach(book => {
-                        let title = book.volumeInfo.title;
-                        let image = book.volumeInfo.imageLinks?.thumbnail || "";
+                    let books = data.items.map(book => ({
+                        id: book.id,
+                        title: book.volumeInfo.title || "No Title",
+                        image: book.volumeInfo.imageLinks?.thumbnail || "",
+                        view: currentView
+                    }));
 
-                        $("#results").append(` 
-                            <div class="book" data-id="${book.id}">
-                                <p>${title}</p>
-                                <img src="${image}">
-                            </div>
-                        `);
-                    });
+                    let template = $("#book-template").html();
+                    let html = Mustache.render(template, { books });
+                    $("#results").html(html);
+
                     pagination()
                 }
             );
        }
-       $("#searchForm").submit(function (e) {
-            e.preventDefault(); // stops page reload
-            searchBooks();
-        });
-
        function pagination() {
             $("#page").empty()
             
@@ -207,13 +337,21 @@
        $(document).on("click", ".book", function() {
             let bookId = $(this).data("id");
             $.getJSON(`https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, function (data) {
-                let info = data.volumeInfo;
+                let info = {
+                    title: data.volumeInfo.title,
+                    author: data.volumeInfo.authors?.join(", ") || "N/A",
+                    rating: data.volumeInfo.averageRating ? data.volumeInfo.averageRating.toFixed(1) : "N/A",
+                    ratingsCount: data.volumeInfo.ratingsCount || 0,
+                    language: data.volumeInfo.language ? data.volumeInfo.language.toUpperCase() : "N/A",
+                    pageCount: data.volumeInfo.pageCount || "N/A",
+                    description: data.volumeInfo.description || "No description"
+                };
 
-                $("#details").html(`
-                    <h2>${info.title}</h2>
-                    <p>Author: ${info.authors?.join(", ") || "N/A"}</p>
-                    <p>${info.description || "No description available"}</p>
-                `);
+                let template= $("#details-template").html();
+                let html = Mustache.render(template, info);
+
+                $("#details").html(html);
+                $("#details")[0].scrollIntoView({ behavior: "smooth", block: "start" });
             });
        });
 
@@ -226,20 +364,28 @@
                 "BYzwAQAAQBAJ",
                 "dFHSswEACAAJ"
             ];
-            myCollection.forEach(id => {
-                $.getJSON(`https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, function (data) {
-                    let title = data.volumeInfo.title || "No Title";
-                    let image = data.volumeInfo.imageLinks?.thumbnail || "";
+            let books = [];
+            myCollection.forEach((id, index) => {
+                setTimeout(() => {
+                    $.getJSON(`https://www.googleapis.com/books/v1/volumes/${id}?key=AIzaSyBXmC_NCHgszBr0nrX-dz9hTFTDeDScdak`, function (data) {
+                        books.push({
+                            id: data.id,
+                            title: data.volumeInfo.title,
+                            image: data.volumeInfo.imageLinks?.thumbnail || "",
+                            view: currentView
+                        });
 
-                    $("#collection").append(`
-                        <div class="book" data-id="${data.id}">
-                            <p>${title}</p>
-                            <img src="${image}" alt="Book Image">
-                        </div>
-                    `);
+                    if (books.length === myCollection.length) {
+                        let template = $("#collection-template").html();
+                        let html = Mustache.render(template, { books });
+
+                        $("#collection").html(html);
+                    }
                 });
-            });
-       }
+        }, index * 300);
+    });
+}
+
         loadCollections();
 });
     </script>
